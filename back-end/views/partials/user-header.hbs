@@ -1,0 +1,109 @@
+<header id="head">
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: aqua;">
+        <a class="navbar-brand" style="font-weight: bolder;"    href="/">Shopping Cart</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/" style="font-weight:bold;">Products <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/cart" id="cart-button" style="font-weight: bold;">Cart 
+                        <span id="cart-count" class="badge badge-success">{{defaultCartCount cartItems.length}}</span>
+                    </a>
+                </li>
+                {{#if user}}
+                <li class="nav-item">
+                    <a class="nav-link" href="/orders" style="font-weight:bold;">Orders</a>
+                </li>
+                {{/if}}     
+            </ul>
+            <!-- Add the search bar here -->
+       <form class="form-inline my-2 my-lg-0 ml-auto position-relative">
+    <input class="form-control mr-sm-2" type="search" id="search-bar" placeholder="Search products..." aria-label="Search" style="width: 200px;">
+    <button type="button" id="clear-search" class="btn btn-link position-absolute" style="right: 10px; top: 50%; transform: translateY(-50%); display: none;">
+        <i class="fas fa-times"></i>
+    </button>
+</form>
+
+
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{#if user}}
+                        {{user.Name}}
+                    {{else}}
+                        Account
+                    {{/if}}
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    {{#if user}}
+                        <a class="dropdown-item" href="/logout">Logout</a>
+                    {{else}}
+                        <a class="dropdown-item" href="/login">Login</a>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+
+<style>
+/* Adjust search bar width for smaller screens */
+@media (max-width: 768px) {
+    #search-bar {
+        width: 150px !important; /* Smaller width for mobile */
+    }
+}
+
+@media (max-width: 576px) {
+    #search-bar {
+        width: 120px !important; /* Even smaller width for very small screens */
+    }
+}
+
+
+
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchBar = document.getElementById('search-bar');
+    const clearSearchButton = document.getElementById('clear-search');
+    const productCards = document.querySelectorAll('.product-card');
+
+    searchBar.addEventListener('input', function() {
+        const searchQuery = this.value.trim().toLowerCase();
+
+        // Show/hide clear button
+        if (searchQuery) {
+            clearSearchButton.style.display = 'block';
+        } else {
+            clearSearchButton.style.display = 'none';
+        }
+
+        // Filter products
+        productCards.forEach(card => {
+            const productName = card.querySelector('.card-title').textContent.toLowerCase();
+            if (productName.includes(searchQuery)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+
+    // Clear search bar and show all products
+    clearSearchButton.addEventListener('click', function() {
+        searchBar.value = '';
+        clearSearchButton.style.display = 'none';
+        productCards.forEach(card => {
+            card.style.display = 'block';
+        });
+    });
+});
+
+</script>
