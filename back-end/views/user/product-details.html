@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{product.Name}}</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- Slick Carousel CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        /* Product Image Styling */
+        .main-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: transform 0.3s ease-in-out;
+        }
+        .main-image:hover {
+            transform: scale(1.05);
+        }
+
+        /* Thumbnail Styling */
+        .thumbnail-slider img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .thumbnail-slider img:hover {
+            transform: scale(1.1);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Price and Buy Now */
+        .product-price {
+            font-size: 24px;
+            color: #e60000;
+            font-weight: bold;
+        }
+        .btn-add-cart, .btn-buy-now {
+            font-size: 18px;
+            padding: 12px;
+            width: 100%;
+            border-radius: 5px;
+            transition: all 0.3s ease-in-out;
+        }
+        .btn-add-cart:hover {
+            background-color: #28a745;
+            color: #fff;
+        }
+        .btn-buy-now {
+            background-color: #ff9900;
+            color: white;
+            font-weight: bold;
+        }
+        .btn-buy-now:hover {
+            background-color: #e68a00;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .main-image {
+                height: 300px;
+            }
+            .thumbnail-slider img {
+                width: 60px;
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Image Section -->
+        <div class="col-md-6">
+            <div class="text-center">
+                <img id="mainImage" class="main-image" src="/product-images/{{product.Images.[0]}}" alt="{{product.Name}}">
+            </div>
+            <div class="thumbnail-slider mt-3">
+                {{#each product.Images}}
+                    <img src="/product-images/{{this}}" onclick="changeImage('{{this}}')">
+                {{/each}}
+            </div>
+        </div>
+
+        <!-- Product Details -->
+        <div class="col-md-6">
+            <h2>{{product.Name}}</h2>
+            <p class="product-price">£{{product.Price}}</p>
+            <p>{{product.Description}}</p>
+
+            <button onclick="addToCart('{{product._id}}', this)" class="btn btn-success btn-add-cart">
+    <i class="fas fa-shopping-cart"></i> Add to Cart
+</button>
+<button onclick="buyNow()" class="btn btn-buy-now mt-3">
+    <i class="fas fa-bolt"></i> Buy Now
+</button>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery and Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- Slick Carousel JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+
+<!-- JavaScript -->
+<script>
+    function addToCart(productId, button) {
+        // Add to cart logic (AJAX request to server)
+        fetch('/add-to-cart/' + productId, { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Success animation
+                    button.innerHTML = '<i class="fas fa-check"></i> Added!';
+                    button.style.backgroundColor = '#28a745';
+                    button.style.color = '#fff';
+                    button.disabled = true;
+                    
+                    // Reset button after 2 seconds
+                    setTimeout(() => {
+                        button.innerHTML = '<i class="fas fa-shopping-cart"></i> Add to Cart';
+                        button.style.backgroundColor = '';
+                        button.style.color = '';
+                        button.disabled = false;
+                    }, 2000);
+                }
+            });
+    }
+
+    function buyNow() {
+        window.location.href = "/cart";  // Redirect to cart page
+    }
+</script>
+
+
+</body>
+</html>
