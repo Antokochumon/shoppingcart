@@ -108,7 +108,7 @@ app.post('/place-order', async (req, res) => {
 
 try {
   app.listen(port, () => {
-    console.log(`🚀 Server running on http://localhos8081`);
+    console.log(`🚀 Server running on http://localhost:8081`);
   });
 } catch (err) {
   console.error("❌ Server failed to start:", err);
