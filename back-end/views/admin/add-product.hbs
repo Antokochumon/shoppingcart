@@ -1,32 +1,25 @@
 <div class="container mt-4">
     <div class="row">
-
-
-
         <div class="col-md-6">
-            <div class="text-center">Add product</div>
-            <form action="/admin/add-product" enctype="multipart/form-data"     method="post">
-                <label for="" >Name</label>
-                <input type="text" name="Name" class="form-control">
+            <div class="text-center"><h3>Add Product</h3></div>
+            <form action="/admin/add-product" enctype="multipart/form-data" method="post">
+                <label>Name</label>
+                <input type="text" name="Name" class="form-control" required>
 
-                <label for="" >Category</label>
-                <input type="text" name="Category" class="form-control">
+                <label>Category</label>
+                <input type="text" name="Category" class="form-control" required>
 
-                
-                <label for="" >Price</label>
-                <input type="text" name="Price" class="form-control">
+                <label>Price</label>
+                <input type="text" name="Price" class="form-control" required>
 
-                
-                <label for="" >Description</label>
-                <input type="text" name="Description" class="form-control">
+                <label>Description</label>
+                <textarea name="Description" class="form-control" rows="3" required></textarea>
 
-                
-                <label for="" >Image</label>
-                <input type="file" name="Image" class="form-control">
-                
-                <button type="submit" class="btn btn-success mt-4">Sumit</button>
+                <!-- Multiple Images Upload -->
+                <label>Upload Images</label>
+                <input type="file" name="Images" class="form-control" multiple accept="image/*">
 
-
+                <button type="submit" class="btn btn-success mt-4">Submit</button>
             </form>
         </div>
     </div>
