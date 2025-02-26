@@ -1,0 +1,47 @@
+<section style="background-color: #f8f9fa; min-height: 100vh; padding: 20px 0;">
+    <div class="container mt-5">
+        <h2 class="mb-4" style="font-weight: bold; color: #333;">Your Ordered Products</h2>
+        <div class="row">
+            {{#each products}}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                <div class="card h-100 shadow-sm" style="border: none; border-radius: 10px; overflow: hidden;">
+                    <img class="card-img-top img-fluid"
+                         src="/product-images/{{this.product._id}}.jpg"
+                         alt="{{this.product.Name}} Image"
+                         style="height: 200px; object-fit: cover;">
+                    <div class="card-body d-flex flex-column" style="padding: 20px;">
+                        <h5 class="card-title" style="font-size: 18px; font-weight: bold; color: #333;">{{this.product.Name}}</h5>
+                        <p class="card-text" style="font-size: 16px; color: #555;">£{{this.product.Price}}</p>
+                        <p class="card-text" style="font-size: 16px; color: #555;">Quantity: {{this.quantity}}</p>
+                        {{#if this.product.Description}}
+                        <p class="card-text flex-grow-1" style="font-size: 14px; color: #666;">{{this.product.Description}}</p>
+                        {{else}}
+                        <p class="card-text flex-grow-1" style="font-size: 14px; color: #666;">No description available.</p>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</section>
+<style>
+/* Custom CSS for additional styling */
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.card-title {
+    transition: color 0.2s ease;
+}
+
+.card:hover .card-title {
+    color: #007bff;
+}
+
+</style>

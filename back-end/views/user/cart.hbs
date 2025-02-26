@@ -1,0 +1,113 @@
+<section style="background-color: #f8f9fa; min-height: 100vh; padding: 20px 0;">
+    <div class="container">
+        <h2 class="mb-4" style="font-weight: bold; color: #333;">Your Cart</h2>
+        {{#if products.length}}
+        <div class="card shadow-sm">
+            <table class="table mb-0">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col" style="width: 15%;">Item</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each products}}
+                    <tr>
+                        <td>
+                            <img src="/product-images/{{this.product._id}}.jpg" alt="Product Image" style="width: 70px; height: 70px; border-radius: 8px;" />
+                        </td>
+                        <td style="font-size: 16px; color: #333;">{{this.product.Name}}</td>
+                        <td style="font-size: 16px; color: #333;">£{{this.product.Price}}</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <button class="btn btn-outline-secondary btn-sm" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user}}',-1, event)">-</button>
+                                <span class="mx-2" style="font-size: 16px;">{{this.quantity}}</span>
+                                <button class="btn btn-outline-secondary btn-sm" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user}}',1, event)">+</button>
+                            </div>
+                        </td>
+                        <td>
+                            <a href="/remove-item/{{this.item}}" class="btn btn-danger btn-sm">Remove</a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <hr>
+        <div class="d-flex justify-content-end align-items-center mt-4">
+            <h3 class="mb-0 mr-4" style="font-weight: bold; color: #333;">Total: £<span id="total">{{totalValue}}</span></h3>
+            <a href="/place-order" class="btn btn-success" style="font-size: 16px; padding: 10px 20px;"><b>Place Order</b></a>
+        </div>
+        {{else}}
+        <div class="text-center py-5">
+            <h3 style="color: #666;">Your cart is empty.</h3>
+        </div>
+        {{/if}}
+    </div>
+</section>
+
+<script>
+  function changeQuantity(cartId, proId, userId, count, event) {
+    let quantityElement = event.target.parentNode.querySelector("span");
+    let currentQuantity = parseInt(quantityElement.innerText);
+    console.log(userId);
+    if (currentQuantity === 1 && count === -1) {
+      if (!confirm("Are you sure you want to remove this item?")) return;
+    }
+
+    $.ajax({
+      url: '/change-product-quantity',
+      data: {
+        user: userId,
+        cart: cartId,
+        product: proId,
+        count: count
+      },
+      method: 'post',
+      success: (response) => {
+        if (response.status) {
+          if (response.removeProduct) {
+            event.target.closest("tr").remove(); // Remove row if quantity is 0
+          } else {
+            quantityElement.innerText = response.newQuantity;
+            document.getElementById('total').innerHTML = response.total;
+            // Update quantity dynamically
+          }
+        } else {
+          alert("Could not update quantity");
+        }
+      },
+    });
+  }
+</script>
+
+
+<style>
+/* Custom CSS for additional styling */
+.card {
+    border: none;
+    border-radius: 10px;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border: none;
+    transition: background-color 0.2s ease;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.btn-danger {
+    transition: background-color 0.2s ease;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+</style>

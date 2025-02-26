@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Table</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <!-- DataTables Responsive CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
+    <!-- Custom CSS -->
+    <style>
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        @media (max-width: 767.98px) {
+            .btn {
+                display: block;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .ml-auto {
+                margin-left: 0 !important;
+            }
+
+            .table-responsive {
+                margin-top: 10px;
+            }
+
+            #productTable {
+                font-size: 14px;
+            }
+
+            #productTable img {
+                max-width: 100%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section>
+        <div class="container">
+            <div class="row mt-4">
+                <a href="/admin/add-product" class="btn btn-success ml-auto" style="margin-bottom: 30px;">Add Product</a>
+            </div>
+
+            <!-- Responsive Table -->
+            <div class="table-responsive">
+                <table id="productTable" class="table mt-5 display nowrap" style="width:100%; margin-top:20px;">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th>Image</th>
+                            <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each products}}
+                        <tr>
+                            <th scope="row">{{@index}}</th>
+                            <td>{{this.Name}}</td>
+                            <td>{{this.Category}}</td>
+                            <td>{{this.Description}}</td>
+                            <td><img style="width:50px; height:50px" src="/product-images/{{this._id}}.jpg" alt=""></td>
+                            <td>
+                                <a href="/admin/edit-product/{{this._id}}" class="btn btn-primary">Edit</a>
+                                <a href="/admin/delete-product/{{this._id}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{this.Name}}?')">Delete</a>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- DataTables JS -->
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <!-- DataTables Responsive JS -->
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <!-- Custom JS -->
+    <script>
+        $(document).ready(function() {
+            // Initialize DataTable
+            var table = $('#productTable').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "lengthMenu": [5, 10, 25, 50],
+                "responsive": true
+            });
+
+            // Live search when typing
+            $('#searchInput').on('keyup', function() {
+                table.search($(this).val()).draw();
+            });
+
+            // Search when button is clicked
+            $('#searchButton').on('click', function() {
+                table.search($('#searchInput').val()).draw();
+            });
+        });
+    </script>
+</body>
+</html>

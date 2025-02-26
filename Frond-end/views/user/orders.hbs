@@ -1,0 +1,157 @@
+<section>
+    <div class="container">
+        <!-- Add the table-responsive class for mobile view -->
+        <div class="table-responsive">
+            <table class="table mt-5">
+                <thead>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Pincode</th>
+                        <th scope="col">Mobile</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Payment</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each orders}}
+                    <tr>
+                        <td data-label="Date">{{this.date}}</td>
+                        <td data-label="Address">{{this.deliveryDetails.address}}</td>
+                        <td data-label="Pincode">{{this.deliveryDetails.pincode}}</td>
+                        <td data-label="Mobile">{{this.deliveryDetails.mobile}}</td>
+                        <td data-label="Amount">{{this.totalAmount}}</td>
+                        <td data-label="Payment">{{this.paymentMethod}}</td>
+                        <td data-label="Status">{{this.status}}</td>
+                        <td data-label="Action">
+                            <a href="/view-order-products/{{this._id}}" class="btn btn-primary">View Products</a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<style>
+/* General Styles */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.table-responsive {
+    overflow-x: auto; /* Enable horizontal scrolling on small screens */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table th,
+.table td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0; /* Light border for rows */
+}
+
+.table th {
+    background-color: #232f3e; /* Amazon-like dark blue header */
+    color: #fff; /* White text for header */
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.table tbody tr:hover {
+    background-color: #f7f7f7; /* Light hover effect for rows */
+}
+
+.btn-primary {
+    background-color: #ff9900; /* Amazon-like orange button */
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #e68a00; /* Darker orange on hover */
+}
+
+/* Responsive Design for Mobile View */
+@media (max-width: 768px) {
+    .table thead {
+        display: none; /* Hide the header on mobile */
+    }
+
+    .table,
+    .table tbody,
+    .table tr,
+    .table td {
+        display: block;
+        width: 100%;
+    }
+
+    .table tr {
+        margin-bottom: 16px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Card-like shadow for rows */
+        background-color: #fff;
+    }
+
+    .table td {
+        text-align: right;
+        padding-left: 50%; /* Add space for labels */
+        position: relative;
+        border-bottom: 1px solid #e0e0e0; /* Light border for rows */
+    }
+
+    .table td::before {
+        content: attr(data-label); /* Add labels for each cell */
+        position: absolute;
+        left: 16px;
+        width: 45%;
+        padding-right: 10px;
+        text-align: left;
+        font-weight: 600;
+        color: #232f3e; /* Amazon-like dark blue label color */
+    }
+
+    .btn-primary {
+        width: 100%; /* Full-width button on mobile */
+        text-align: center;
+    }
+}
+
+/* Desktop View Enhancements */
+@media (min-width: 769px) {
+    .table th,
+    .table td {
+        padding: 20px; /* Increase padding for desktop */
+    }
+
+    .table tbody tr:nth-child(even) {
+        background-color: #f9f9f9; /* Zebra striping for rows */
+    }
+
+    .btn-primary {
+        width: auto; /* Auto-width button on desktop */
+    }
+}
+</style>
