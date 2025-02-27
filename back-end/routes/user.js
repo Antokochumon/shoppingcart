@@ -230,17 +230,8 @@ router.post('/save-order', async (req, res) => {
   });
 
 
-router.get('/product-details/:id', async (req, res) => {
-    try {
-        let product = await productHelpers.getProductDetails(req.params.id);
-        if (!product) {
-            return res.status(404).send("Product not found");
-        }
-        res.render('user/product-details', { product });
-    } catch (err) {
-        console.error("Error fetching product details:", err);
-        res.status(500).send("Internal Server Error");
-    }
+router.get('/product-details', (req, res) => {
+    res.render('user/product-details', { user: req.session.user});
 });
 
 
