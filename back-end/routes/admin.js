@@ -15,37 +15,33 @@ router.get('/add-product',function(req,res){
   res.render('admin/add-product')
 })
 router.post('/add-product',(req,res)=>{
-  console.log(req.body);
-  console.log(req.files.Image);
+router.post('/add-product', (req, res) => {
+    console.log(req.body);
+    console.log(req.files.Image);
 
-  const fs = require('fs');
-  const path = require('path');
-  
-  productHelpers.addProduct(req.body, (id) => {
-      let image = req.files.Image;
-      console.log(id);
-  
-      // Define the path where the image will be saved
-      const uploadPath = path.join(__dirname, '../public/product-images', `${id}.jpg`);
-  
-      // Ensure that the 'product-images' directory exists
-      const dirPath = path.dirname(uploadPath);
-      if (!fs.existsSync(dirPath)) {
-          fs.mkdirSync(dirPath, { recursive: true });
-      }
-  
-      // Move the image to the specified path
-      image.mv(uploadPath, (err, done) => {
-          if (!err) {
-              res.render("admin/add-product");
-          } else {
-              console.log(err);
-              res.status(500).send('Image upload failed');
-          }
-      });
-  });
-  
-  
+    productHelpers.addProduct(req.body, (id) => {
+        let image = req.files.Image;
+        console.log(id);
+
+        // Define the path where the image will be saved
+        const uploadPath = path.join(__dirname, '../public/product-images', `${id}.jpg`);
+
+        // Ensure that the 'product-images' directory exists
+        const dirPath = path.dirname(uploadPath);
+        if (!fs.existsSync(dirPath)) {
+            fs.mkdirSync(dirPath, { recursive: true });
+        }
+
+        // Move the image to the specified path
+        image.mv(uploadPath, (err) => {
+            if (!err) {
+                res.redirect('/admin'); // Redirect to admin page after successful upload
+            } else {
+                console.log(err);
+                res.status(500).send('Image upload failed');
+            }
+        });
+    });
 })
 router.get('/delete-product/:id', (req, res) =>{
     
