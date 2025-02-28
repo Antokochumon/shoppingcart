@@ -360,5 +360,16 @@ module.exports = {
                 reject(err);
             }
         });
+    },
+      getProductById: async (productId) => {
+        try {
+            console.log("Fetching product from DB for ID:", productId); // Log the product ID
+            const product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ _id: new ObjectId(productId) });
+            console.log("Product fetched from DB:", product); // Log the fetched product
+            return product;
+        } catch (error) {
+            console.error('Error fetching product:', error); // Log the error
+            throw new Error('Could not fetch product');
+        }
     }
 };
