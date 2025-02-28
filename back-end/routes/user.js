@@ -230,10 +230,24 @@ router.post('/save-order', async (req, res) => {
   });
 
 
-router.get('/product-details', (req, res) => {
-    res.render('user/product-details', { user: req.session.user});
-});
+  router.get('/product-details/:productId', async (req, res) => {
+    try {
+        console.log("Fetching product details for ID:", req.params.productId); // Log the product ID
+        const productId = req.params.productId;
+        const product = await userHelpers.getProductById(productId);
 
+        if (!product) {
+            console.log("Product not found for ID:", productId); // Log if product is not found
+            return res.status(404).send('Product not found');
+        }
+
+        console.log("Product fetched successfully:", product); // Log the fetched product
+        res.render('user/product-details', { user: req.session.user, product });
+    } catch (error) {
+        console.error("Error fetching product details:", error); // Log the error
+        res.status(500).send('Server error');
+    }
+});
 
 module.exports = router;
 
