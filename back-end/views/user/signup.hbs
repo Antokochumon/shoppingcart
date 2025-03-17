@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Arial', sans-serif;
+      padding: 20px;
+      margin: 0;
+    }
+    .signup-container {
+      background: #fff;
+      padding: 2.5rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+      max-width:500px;
+      width: 100%;
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      margin-top: 100px;
+    }
+    .signup-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    }
+h1 {
+    color: #333;
+    margin-bottom: 2rem;
+    font-weight: bold;
+    text-align: center;
+    font-size: 2.5rem;
+    font-family: 'Roboto', sans-serif;  /* Changed to Roboto */
+}
+
+    .form-group label {
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    .form-control {
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      padding: 12px;
+      margin-bottom: 1.5rem;
+      font-size: 16px;
+      width: 100%;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .form-control:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 8px rgba(102, 126, 234, 0.5);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      padding: 14px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 16px;
+      color: #fff;
+      transition: all 0.3s ease;
+      width: 100%;
+      cursor: pointer;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+    a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-block;
+      margin-top: 10px;
+      transition: color 0.3s ease;
+    }
+    a:hover {
+      color: #764ba2;
+      text-decoration: underline;
+    }
+    .alert-custom {
+      background-color: #f8d7da;
+      color: #721c24;
+      padding: 10px 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+      text-align: center;
+      font-weight: bold;
+      border: 1px solid #f5c6cb;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 m-auto">
+        <div class="signup-container">
+          <h1 class="text-center">Create New Account</h1>
+          <form id="signupForm" action="/signup" method="post">
+            <div id="alertMessage" class="alert-custom" style="display: none;">
+              Incorrect username, password, or email.
+            </div>
+
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text" class="form-control" id="username" name="Name" placeholder="Enter Name">
+            </div>
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" class="form-control" id="email" name="Email" placeholder="Enter email">
+            </div>
+            <div class="form-group">
+              <label>Password</label>
+              <input type="password" class="form-control" id="password" name="Password" placeholder="Password">
+            </div>
+
+            <div class="form-group text-center">
+              <a href="/login">Already have an account?</a>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+  <script>
+    // Function to validate form inputs
+    document.getElementById("signupForm").addEventListener("submit", function(event) {
+      const username = document.getElementById("username").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      // Check if any of the fields are empty
+      if (!username || !email || !password) {
+        event.preventDefault();  // Prevent form submission
+        document.getElementById("alertMessage").style.display = "block";  // Show alert
+      }
+    });
+  </script>
+</body>
+</html>

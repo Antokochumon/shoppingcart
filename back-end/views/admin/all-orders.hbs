@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Orders</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .table {
+      border-radius: 10px;
+      overflow: hidden;
+      background-color: white;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    th, td {
+      text-align: center;
+      vertical-align: middle;
+    }
+    th {
+      background: linear-gradient(135deg, #007bff, #00bfff);
+      color: white;
+      font-weight: bold;
+    }
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+    .status-placed { color: blue; font-weight: bold; }
+    .status-paid { color: green; font-weight: bold; }
+    .status-shipped { color: orange; font-weight: bold; }
+    .status-delivered { color: darkgreen; font-weight: bold; }
+    .product-img {
+      height: 50px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+    /* Alternating row colors */
+    .table-striped tbody tr:nth-of-type(odd) {
+      background-color: rgba(0, 123, 255, 0.05);
+    }
+    /* Desktop-specific design */
+    @media (min-width: 768px) {
+      .table {
+        font-size: 14px;
+      }
+      th, td {
+        padding: 12px;
+      }
+      .table-striped tbody tr {
+        transition: background-color 0.3s ease;
+      }
+      .table-striped tbody tr:hover {
+        background-color: rgba(0, 123, 255, 0.1);
+      }
+      /* Desktop divider */
+      .user-details-divider {
+        border-bottom: 2px solid #ff6b6b; /* Red divider color */
+       
+      }
+    }
+    /* Mobile-specific design */
+    @media (max-width: 768px) {
+      .table-responsive {
+        overflow-x: auto;
+      }
+      .table thead {
+        display: none;
+      }
+      .table, .table tbody, .table tr, .table td {
+        display: block;
+        width: 100%;
+      }
+      .table tr {
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background-color: #ffffff; /* White background for rows */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+      }
+      .table td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+        background-color: #f8f9fa; /* Light gray background for cells */
+      }
+      .table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        width: 45%;
+        padding-right: 10px;
+        text-align: left;
+        font-weight: bold;
+        color: #007bff; /* Blue color for labels */
+      }
+      /* Mobile divider */
+      .user-details-divider {
+        display: block; /* Ensure the divider is displayed as a block */
+        width: 100%; /* Full width */
+        height: 2px; /* Height of the divider */
+        background-color: #007bff; /* Blue divider color */
+        
+        border: none; /* Remove any default borders */
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container my-4">
+    <h1 class="text-center text-primary mb-4">All Orders</h1>
+    
+    {{#if orders.length}}
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>User Name</th>
+              <th>User Email</th>
+              <th>Product Image</th>
+              <th>Product Name</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Address</th>
+              <th>Pincode</th>
+              <th>Mobile</th>
+              <th>Payment Method</th>
+              <th>Total Amount</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each orders}}
+              {{#each this.products}}
+                <tr>
+                  <td data-label="Order ID">{{../this._id}}</td>
+                  <td data-label="User Name">{{../this.user.name}}</td>
+                  <td data-label="User Email">{{../this.user.email}}</td>
+                  {{#if this.product}}
+                    <td data-label="Product Image"><img class="product-img" src="/product-images/{{this.product.Image}}" alt="{{this.product.Name}}"></td>
+                    <td data-label="Product Name">{{this.product.Name}}</td>
+                    <td data-label="Price">£{{this.product.Price}}</td>
+                    <td data-label="Quantity">{{this.quantity}}</td>
+                  {{else}}
+                    <td colspan="3" class="text-danger">Product details not available</td>
+                  {{/if}}
+                  <td data-label="Address">{{../this.deliveryDetails.address}}</td>
+                  <td data-label="Pincode">{{../this.deliveryDetails.pincode}}</td>
+                  <td data-label="Mobile">{{../this.deliveryDetails.mobile}}</td>
+                  <td data-label="Payment Method">{{../this.paymentMethod}}</td>
+                  <td data-label="Total Amount">£{{../this.totalAmount}}</td>
+                  <td data-label="Status">
+                    {{#if (eq ../this.status "placed")}}
+                      <span class="status-placed">{{../this.status}}</span>
+                    {{else if (eq ../this.status "paid")}}
+                      <span class="status-paid">{{../this.status}}</span>
+                    {{else if (eq ../this.status "shipped")}}
+                      <span class="status-shipped">{{../this.status}}</span>
+                    {{else if (eq ../this.status "delivered")}}
+                      <span class="status-delivered">{{../this.status}}</span>
+                    {{else}}
+                      <span>{{../this.status}}</span>
+                    {{/if}}
+                  </td>
+                  <td data-label="Date">{{../this.date}}</td>
+                </tr>
+              {{/each}}
+              <!-- Add a divider between user details -->
+              <tr>
+                <td colspan="14">
+                  <div class="user-details-divider"></div>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    {{else}}
+      <div class="alert alert-warning text-center">No orders found.</div>
+    {{/if}}
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

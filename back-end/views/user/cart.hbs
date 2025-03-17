@@ -1,0 +1,189 @@
+<section style="background-color: #f8f9fa; min-height: 100vh; padding: 20px 0;">
+    <div class="container">
+        <h2 class="mb-4" style="font-weight: bold; color: #333;">Your Cart</h2>
+        {{#if products.length}}
+        <div class="card shadow-sm">
+            <table class="table mb-0">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col" style="width: 15%;">Item</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each products}}
+                    <tr>
+                        <td>
+                            <img src="/product-images/{{this.product.Image}}" alt="Product Image" style="width: 70px; height: 70px; border-radius: 8px;" />
+                        </td>
+                        <td style="font-size: 16px; color: #333;">{{this.product.Name}}</td>
+                        <td style="font-size: 16px; color: #333;">£{{this.product.Price}}</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <button class="btn btn-outline-secondary btn-sm" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user}}',-1, event)">-</button>
+                                <span class="mx-2" style="font-size: 16px;">{{this.quantity}}</span>
+                                <button class="btn btn-outline-secondary btn-sm" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user}}',1, event)">+</button>
+                            </div>
+                        </td>
+                        <td>
+                            <a href="/remove-item/{{this.item}}" class="btn btn-danger btn-sm">Remove</a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <hr>
+        <div class="d-flex justify-content-end align-items-center mt-4">
+            <h3 class="mb-0 mr-4" style="font-weight: bold; color: #333;">Total: £<span id="total">{{totalValue}}</span></h3>
+            <a href="/place-order" class="btn btn-success" style="font-size: 16px; padding: 10px 20px;"><b>Place Order</b></a>
+        </div>
+        {{else}}
+        <div class="text-center py-5">
+            <h3 style="color: #666;">Your cart is empty.</h3>
+        </div>
+        {{/if}}
+    </div>
+</section>
+
+<script>
+  function changeQuantity(cartId, proId, userId, count, event) {
+    let quantityElement = event.target.parentNode.querySelector("span");
+    let currentQuantity = parseInt(quantityElement.innerText);
+    console.log(userId);
+    if (currentQuantity === 1 && count === -1) {
+      if (!confirm("Are you sure you want to remove this item?")) return;
+    }
+
+    $.ajax({
+      url: '/change-product-quantity',
+      data: {
+        user: userId,
+        cart: cartId,
+        product: proId,
+        count: count
+      },
+      method: 'post',
+      success: (response) => {
+        if (response.status) {
+          if (response.removeProduct) {
+            event.target.closest("tr").remove(); // Remove row if quantity is 0
+          } else {
+            quantityElement.innerText = response.newQuantity;
+            document.getElementById('total').innerHTML = response.total;
+            // Update quantity dynamically
+          }
+        } else {
+          alert("Could not update quantity");
+        }
+      },
+    });
+  }
+</script>
+
+<style>
+    /* Custom CSS for additional styling */
+    .card {
+        border: none;
+        border-radius: 10px;
+        overflow: hidden; /* Ensure rounded corners for child elements */
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border: none;
+        transition: background-color 0.2s ease;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+    }
+
+    .btn-danger {
+        transition: background-color 0.2s ease;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+
+    .table {
+        margin-bottom: 0; /* Remove default margin */
+    }
+
+    .table thead th {
+        background-color: #f8f9fa; /* Light background for table header */
+        color: #333;
+        font-weight: 600;
+    }
+
+    .table tbody tr {
+        transition: background-color 0.2s ease;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f1f1f1; /* Hover effect for table rows */
+    }
+
+    .btn-outline-secondary {
+        border-radius: 5px;
+        padding: 5px 10px;
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: #e9ecef; /* Hover effect for quantity buttons */
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        section {
+            background-color: #e9ecef; /* Background color for mobile view */
+        }
+
+        .table thead {
+            display: none; /* Hide table header on small screens */
+        }
+
+        .table tbody tr {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 10px;
+            background-color: #fff; /* White background for each card */
+        }
+
+        .table tbody td {
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+
+        .table tbody td:before {
+            content: attr(data-label);
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .table tbody td img {
+            margin-bottom: 10px;
+        }
+
+        .d-flex.justify-content-end {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .d-flex.justify-content-end h3 {
+            margin-bottom: 10px;
+        }
+    }
+</style>

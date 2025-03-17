@@ -1,0 +1,236 @@
+<header id="head">
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: aqua; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        <a class="navbar-brand" href="/" style="font-weight: 700; font-family: 'Times New Roman', Times, serif; color: black; font-size: 34px; text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5), 0 0 2px black; letter-spacing: 1px; text-decoration: none; -webkit-text-stroke: 0.5px black;">
+            Shopping Cart
+        </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/" style="font-weight: bold; font-family: 'Arial', sans-serif; font-size: 18px; padding: 10px 20px;">Products <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/cart" id="cart-button" style="font-weight: bold; font-family: 'Arial', sans-serif; font-size: 18px; padding: 10px 20px;">
+                        <!-- Cart Logo -->
+                        <i class="fas fa-shopping-cart" style="font-size: 20px; margin-right: 10px;"></i>
+                        Cart 
+                        <span id="cart-count" class="badge badge-success" style="position: absolute; top: -5px; right: -10px; font-size: 14px;">{{defaultCartCount cartItems.length}}</span>
+                    </a>
+                </li>
+                {{#if user}}
+                <li class="nav-item">
+                    <a class="nav-link" href="/orders" style="font-weight: bold; font-family: 'Arial', sans-serif; font-size: 18px; padding: 10px 20px;">Orders</a>
+                </li>
+                {{/if}}     
+            </ul>
+            
+            <!-- Add the search bar here -->
+            <form class="form-inline my-2 my-lg-0 ml-auto position-relative">
+                <input class="form-control mr-sm-2" type="search" id="search-bar" placeholder="Search products..." aria-label="Search" style="width: 200px; border-radius: 8px; padding-left: 30px; border: 1px solid #ddd;">
+                <button type="button" id="clear-search" class="btn btn-link position-absolute" style="right: 10px; top: 50%; transform: translateY(-50%); display: none;">
+                    <i class="fas fa-times" style="color: #00796b;"></i>
+                </button>
+            </form>
+
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius: 8px;">
+                    {{#if user}}
+                        {{user.Name}}
+                    {{else}}
+                        Account
+                    {{/if}}
+                </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  {{#if user}}
+                  <a class="dropdown-item" href="/logout">
+                  <i class="fas fa-sign-out-alt"></i> Logout
+                 </a>
+                 {{else}}
+                   <a class="dropdown-item" href="/login">
+                   <i class="fas fa-sign-in-alt"></i> Login
+                   </a>
+                 {{/if}}
+             </div>
+            </div>
+        </div>
+    </nav>
+</header>
+<style>
+  .dropdown-menu {
+    background: linear-gradient(135deg, #007bff, #00bfff); /* Gradient background */
+    border-radius: 8px; /* Rounded corners */
+    border: none; /* Remove default border */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    overflow: hidden;
+  }
+
+  .dropdown-item {
+    color: white;
+    font-weight: bold;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    transition: background 0.3s ease;
+  }
+
+  .dropdown-item i {
+    margin-right: 8px;
+  }
+
+  .dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.2); /* Soft hover effect */
+  }
+</style>
+
+<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+  {{#if user}}
+    <a class="dropdown-item" href="/logout">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+  {{else}}
+    <a class="dropdown-item" href="/login">
+      <i class="fas fa-sign-in-alt"></i> Login
+    </a>
+  {{/if}}
+</div>
+
+<!-- FontAwesome for icons -->
+<script src="https://kit.fontawesome.com/YOUR_KIT_CODE.js" crossorigin="anonymous"></script>
+
+<style>
+    /* Make the header fixed */
+    #head {
+        position: fixed; /* Fix the header at the top */
+        top: 0; /* Stick to the top */
+        left: 0; /* Align to the left */
+        width: 100%; /* Full width */
+        z-index: 1000; /* Ensure it stays above other content */
+    }
+
+    /* Add padding to the body to prevent content from being hidden behind the fixed header */
+    body {
+        padding-top: 80px; /* Adjust this value based on the height of your header */
+    }
+
+    /* Navbar style enhancements */
+    .navbar {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for navbar */
+    }
+
+    .nav-link, .navbar-brand {
+        font-family: 'Arial', sans-serif;
+    }
+
+    /* Cart button and notification style */
+    #cart-button {
+        position: relative;
+        font-size: 18px;
+        color: #000; /* Remove background color, make text black */
+        font-weight: bold;
+        padding: 8px 20px;
+        border-radius: 12px;
+        transition: background-color 0.3s;
+        display: flex;
+        align-items: center;
+    }
+
+    #cart-button:hover {
+        color: #00796b; /* Hover effect */
+    }
+
+    #cart-count {
+        background-color: #ff5722; /* Cart item count badge */
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+        padding: 5px 8px;
+        border-radius: 50%;
+        position: absolute;
+        top: -5px;
+        right: -10px;
+    }
+
+    /* Search bar improvements */
+    #search-bar {
+        width: 200px;
+        padding: 12px 20px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        background-color: #fafafa;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #clear-search {
+        color: #00796b;
+    }
+
+    /* Dropdown button */
+    .dropdown-toggle {
+        border-radius: 8px;
+        background-color: #009688;
+        color: white;
+        padding: 8px 20px;
+        transition: background-color 0.3s;
+    }
+
+    .dropdown-toggle:hover {
+        background-color: #00796b;
+    }
+
+    .dropdown-item {
+        padding: 10px 15px;
+        font-size: 16px;
+        transition: background-color 0.2s ease;
+    }
+
+    .dropdown-item:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        #search-bar {
+            width: 150px;
+        }
+
+        #cart-button {
+            padding: 8px 16px;
+        }
+        .navbar-brand {
+            font-size: 26px !important; /* Smaller font size for mobile */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 1px black; /* Adjust text shadow */
+        }
+    }
+
+
+  .dropdown-menu {
+    background: linear-gradient(135deg, #007bff, #00bfff); /* Gradient background */
+    border-radius: 8px; /* Rounded corners */
+    border: none; /* Remove default border */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    overflow: hidden;
+  }
+
+  .dropdown-item {
+    color: white;
+    font-weight: bold;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    transition: background 0.3s ease;
+  }
+
+  .dropdown-item i {
+    margin-right: 8px;
+  }
+
+  .dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.2); /* Soft hover effect */
+  }
+
+
+</style>

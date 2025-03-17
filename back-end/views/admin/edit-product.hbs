@@ -1,0 +1,69 @@
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="text-center">
+                <h2>Edit Product</h2>
+            </div>
+           <form action="/admin/edit-product/{{product._id}}" method="POST" enctype="multipart/form-data">
+    <div class="form-group">
+        <label>Product Name</label>
+        <input type="text" name="Name" class="form-control" value="{{product.Name}}" required>
+    </div>
+
+    <div class="form-group">
+        <label>Price</label>
+        <input type="number" name="Price" class="form-control" value="{{product.Price}}" required>
+    </div>
+
+    <div class="form-group">
+        <label>Category</label>
+        <input type="text" name="Category" class="form-control" value="{{product.Category}}" required>
+    </div>
+     <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea name="Description" class="form-control" rows="3" required>{{product.Description}}</textarea>
+     </div>
+
+    <div class="form-group">
+        <label>Current Image</label><br>
+        <img src="/product-images/{{product.Image}}" width="100">
+        <input type="file" name="Image" class="form-control-file">
+    </div>
+
+    <div class="form-group">
+        <label>Current Additional Images</label>
+        <div class="d-flex flex-wrap" id="currentAdditionalImages">
+            {{#each product.additionalImages}}
+                <div class="image-container" style="position: relative; margin: 5px;">
+                    <img src="/product-images/{{this}}" alt="Additional Image" style="width: 80px; height: auto;">
+                    <button type="button" class="btn btn-danger btn-sm remove-image" data-image="{{this}}" style="position: absolute; top: 0; right: 0;">×</button>
+                </div>
+            {{/each}}
+        </div>
+
+        <label>Upload New Additional Images</label>
+        <input type="file" name="additionalImages" class="form-control-file" multiple>
+    </div>
+
+    <!-- Submit Button (Make sure it's inside the <form>) -->
+    <button type="submit" class="btn btn-primary mt-3">Update Product</button>
+</form>
+
+<script>
+    document.querySelectorAll('.remove-image').forEach(button => {
+        button.addEventListener('click', function () {
+            const imageName = this.getAttribute('data-image');
+            if (confirm('Are you sure you want to remove this image?')) {
+                fetch(`/admin/remove-additional-image/{{product._id}}?imageName=${imageName}`, {
+                    method: 'DELETE'
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        alert('Failed to remove image');
+                    }
+                }).catch(error => console.error('Error:', error));
+            }
+        });
+    });
+</script>
