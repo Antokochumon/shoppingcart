@@ -13,7 +13,7 @@ const userHelpers = require('./helpers/user-helpers');
 // Create the express app
 const app = express();
 
-const port = process.env.PORT || 6000;
+const port = process.env.PORT || 6001; // Use a different port if 6000 is occupied
 
 // Set up view engine with express-handlebars
 const hbs = exphbs.create({
@@ -108,8 +108,10 @@ app.post('/place-order', async (req, res) => {
 });
 
 // Start the server
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`Server is running on port ${port}`);
+}).on('error', (err) => {
+  console.error('Server error:', err);
 });
 
 module.exports = app;
